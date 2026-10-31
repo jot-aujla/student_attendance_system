@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Sign in{% endblock %}
+{% block public_content %}
+<div class="login-page">
+  <div class="login-art">
+    <div class="art-brand"><span class="brand-mark">A</span> Attendly</div>
+    <div class="art-copy"><div class="pill-light">✦ &nbsp; SMART CAMPUS TOOLS</div><h1>Every class.<br>Every student.<br><em>Accounted for.</em></h1><p>A simpler way to manage attendance, support faculty, and keep your department organised.</p></div>
+    <div class="art-footer">STUDENT ATTENDANCE MANAGEMENT SYSTEM <span>01 / 03</span></div>
+  </div>
+  <div class="login-panel">
+    <div class="login-form-wrap"><div class="mobile-brand"><span class="brand-mark">A</span> Attendly</div><div class="eyebrow">WELCOME BACK</div><h2>Sign in to your portal</h2><p class="muted">Use your account to continue to your workspace.</p>
+      <form method="post" class="form-stack">
+        <label>Username<input name="username" placeholder="Enter your username" autocomplete="username" required></label>
+        <label>Password<input type="password" name="password" placeholder="Enter your password" autocomplete="current-password" required></label>
+        <button class="btn btn-primary full" type="submit">Sign in <span>→</span></button>
+      </form>
+      <div class="demo-box"><strong>Harjot Singh</strong><div><span>24BSC10015</span><code></code></div><div><span>B.Sc Computer Science</span><code></code></div><small>harjotaujla571@gmail.com</small></div>
+    </div>
+    <div class="login-bottom">Secure role-based access <span>•</span> Academic year 2026–27</div>
+  </div>
+</div>
+{% endblock %}

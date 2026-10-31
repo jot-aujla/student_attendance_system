@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Attendance report{% endblock %}
+{% block page_heading %}Attendance report{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><h1>Attendance report</h1><p class="muted">Review student attendance for a selected date and section.</p></div><div class="date-chip">▤ &nbsp; Daily report</div></div>
+<div class="panel filter-panel"><form method="get" class="filter-form"><label>Section<select name="section"><option value="">All sections</option>{% for section in sections %}<option value="{{ section }}" {% if section == selected_section %}selected{% endif %}>{{ section }}</option>{% endfor %}</select></label><label>Attendance date<input type="date" name="attendance_date" value="{{ selected_date }}" required></label><button class="btn btn-secondary" type="submit">Apply filters →</button></form></div>
+<div class="panel report-panel"><div class="panel-heading"><div><h3>Daily attendance <span class="section-count">{{ selected_date }}</span></h3><p>{% if selected_section %}Section {{ selected_section }}{% else %}All sections{% endif %}</p></div><button class="btn btn-light" type="button" onclick="window.print()">⤓ &nbsp; Print report</button></div>
+<div class="table-wrap"><table><thead><tr><th>ROLL NO.</th><th>STUDENT</th><th>SECTION</th><th>STATUS</th></tr></thead><tbody>{% for row in rows %}<tr class="{% if row['status']=='Absent' %}row-absent{% endif %}"><td>{{ row['roll_no'] }}</td><td class="student-cell"><span class="mini-avatar">{{ row['full_name'][0] }}</span>{{ row['full_name'] }}</td><td>{{ row['section'] }}</td><td>{% if row['status'] %}<span class="status {{ 'absent' if row['status']=='Absent' else 'present' }}">{{ row['status'] }}</span>{% else %}<span class="status unmarked">Not marked</span>{% endif %}</td></tr>{% else %}<tr><td colspan="4" class="empty-cell">No student records found.</td></tr>{% endfor %}</tbody></table></div></div>
+{% endblock %}

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Attendly{% endblock %} · Student Attendance</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+{% if session.get('user_id') %}
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-mark">A</span><span>Attendly<small>STUDENT PORTAL</small></span></a>
+    <div class="nav-label">WORKSPACE</div>
+    <a class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}">▦ <span>Dashboard</span></a>
+    {% if session.get('role') == 'hod' %}
+    <a class="nav-link {% if request.endpoint == 'students' %}active{% endif %}" href="{{ url_for('students') }}">♙ <span>Manage students</span></a>
+    {% endif %}
+    {% if session.get('role') == 'faculty' %}
+    <a class="nav-link {% if request.endpoint == 'attendance' %}active{% endif %}" href="{{ url_for('attendance') }}">✓ <span>Mark attendance</span></a>
+    {% endif %}
+    <a class="nav-link {% if request.endpoint == 'report' %}active{% endif %}" href="{{ url_for('report') }}">▤ <span>Attendance report</span></a>
+    <div class="sidebar-bottom">
+      <div class="user-chip"><div class="avatar">{{ session.get('full_name','U')[0] }}</div><div><strong>{{ session.get('full_name') }}</strong><small>{{ 'HOD' if session.get('role') == 'hod' else 'FACULTY' }}</small></div></div>
+      <a class="logout" href="{{ url_for('logout') }}">↪ Log out</a>
+    </div>
+  </aside>
+  <main class="main-area">
+    <header class="topbar"><div><span class="eyebrow">ACADEMIC MANAGEMENT</span><div class="topbar-title">{% block page_heading %}Dashboard{% endblock %}</div></div><div class="top-date">◷ &nbsp; {{ today_display if today_display else '' }}{{ '' }}</div></header>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}<div class="flash-stack">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+    {% endwith %}
+    <section class="page-content">{% block content %}{% endblock %}</section>
+    <footer>Attendly · Student Attendance Management <span>Made for academic use</span></footer>
+  </main>
+</div>
+{% else %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}<div class="login-flashes">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+{% endwith %}
+{% block public_content %}{% endblock %}
+{% endif %}
+</body>
+</html>

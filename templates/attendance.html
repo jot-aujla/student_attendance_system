@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Mark attendance{% endblock %}
+{% block page_heading %}Mark attendance{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><h1>Take attendance</h1><p class="muted">Select a section and date, then mark every student present or absent.</p></div><div class="date-chip">✓ &nbsp; Faculty access</div></div>
+<div class="panel filter-panel"><form method="get" class="filter-form"><label>Section<select name="section" required>{% for section in sections %}<option value="{{ section }}" {% if section == selected_section %}selected{% endif %}>{{ section }}</option>{% endfor %}</select></label><label>Attendance date<input type="date" name="attendance_date" value="{{ selected_date }}" required></label><button class="btn btn-secondary" type="submit">Load class →</button></form></div>
+{% if selected_section %}
+<form method="post">
+  <input type="hidden" name="section" value="{{ selected_section }}"><input type="hidden" name="attendance_date" value="{{ selected_date }}">
+  <div class="panel roster-panel"><div class="panel-heading"><div><h3>{{ selected_section }} <span class="section-count">{{ roster|length }} students</span></h3><p>Tap Present or Absent for each student. Absent rows are highlighted red.</p></div><div class="legend"><span><i class="legend-dot green-dot"></i> Present</span><span><i class="legend-dot red-dot"></i> Absent</span></div></div>
+  {% if roster %}<div class="table-wrap"><table class="roster-table"><thead><tr><th>ROLL NO.</th><th>STUDENT NAME</th><th>ATTENDANCE STATUS</th></tr></thead><tbody>{% for student in roster %}<tr class="roster-row {% if student['status']=='Absent' %}row-absent{% endif %}" data-row="{{ student['id'] }}"><td class="roll-cell">{{ student['roll_no'] }}</td><td class="student-cell"><span class="mini-avatar">{{ student['full_name'][0] }}</span>{{ student['full_name'] }}</td><td><div class="status-toggle"><label class="toggle-option present-option"><input type="radio" name="status_{{ student['id'] }}" value="Present" {% if student['status'] != 'Absent' %}checked{% endif %}><span>✓ Present</span></label><label class="toggle-option absent-option"><input type="radio" name="status_{{ student['id'] }}" value="Absent" {% if student['status']=='Absent' %}checked{% endif %}><span>✕ Absent</span></label></div></td></tr>{% endfor %}</tbody></table></div>
+  <div class="roster-footer"><span class="muted">Changes are saved when you click the button.</span><button class="btn btn-primary" type="submit">Save attendance <span>→</span></button></div>
+  {% else %}<div class="empty-state">No students in this section. Ask the HOD to add students.</div>{% endif %}
+  </div>
+</form>
+<script>
+document.querySelectorAll('.roster-row input[type="radio"]').forEach(function(input) {
+  input.addEventListener('change', function() {
+    const row = input.closest('.roster-row');
+    row.classList.toggle('row-absent', input.value === 'Absent' && input.checked);
+  });
+});
+</script>
+{% else %}<div class="panel empty-state">There are no sections yet. Ask the HOD to add students before taking attendance.</div>{% endif %}
+{% endblock %}

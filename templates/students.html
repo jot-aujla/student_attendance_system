@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Manage students{% endblock %}
+{% block page_heading %}Manage students{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><h1>Student directory</h1><p class="muted">Add students, keep roll numbers unique, and organise them by section.</p></div><div class="date-chip">♙ &nbsp; HOD access</div></div>
+<div class="student-layout">
+  <div class="panel add-panel"><div class="panel-heading"><div><h3>Add a student</h3><p>Enter the student’s academic details</p></div><span class="stat-icon purple">＋</span></div>
+    <form method="post" class="form-stack"><input type="hidden" name="action" value="add">
+      <label>Full name<input name="full_name" placeholder="e.g. Amandeep Singh" required></label>
+      <label>Roll number<input name="roll_no" placeholder="e.g. CSE007" required></label>
+      <label>Section<input name="section" placeholder="e.g. CSE-A" required></label>
+      <button class="btn btn-primary full" type="submit">＋ &nbsp; Add student</button>
+    </form>
+    <div class="helper-note">Tip: use a consistent section format such as CSE-A or CSE-B.</div>
+  </div>
+  <div class="panel directory-panel"><div class="panel-heading"><div><h3>All students</h3><p>{{ students|length }} student records</p></div><span class="section-count">Directory</span></div>
+    {% if students %}<div class="table-wrap"><table><thead><tr><th>STUDENT</th><th>ROLL NO.</th><th>SECTION</th><th></th></tr></thead><tbody>{% for student in students %}<tr><td class="student-cell"><span class="mini-avatar">{{ student['full_name'][0] }}</span>{{ student['full_name'] }}</td><td>{{ student['roll_no'] }}</td><td><span class="section-badge">{{ student['section'] }}</span></td><td><form method="post" onsubmit="return confirm('Remove this student and their attendance records?');"><input type="hidden" name="action" value="delete"><input type="hidden" name="student_id" value="{{ student['id'] }}"><button class="icon-button danger" title="Remove student" aria-label="Remove student">⌫</button></form></td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-state">No students found. Add the first student using the form.</div>{% endif %}
+  </div>
+</div>
+{% endblock %}
